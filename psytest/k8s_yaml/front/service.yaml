@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: psytest-front
+  namespace: psytest
+spec:
+  clusterIP: 10.96.80.81
+  internalTrafficPolicy: Cluster
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: front-port
+  selector:
+    app: java-front
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
