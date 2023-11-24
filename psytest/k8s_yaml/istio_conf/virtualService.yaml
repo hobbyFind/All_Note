@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: psytest-front
+  namespace: psytest
+spec:
+  gateways:
+  - psytest-gateway
+  hosts:
+  - test.psytest.com
+  http:
+  - match:
+    - uri:
+        exact: /
+    route:
+    - destination:
+        host: psytest-front
+        subset: v1 
+        port:
+          number: 80
