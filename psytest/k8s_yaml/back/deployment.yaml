@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backen
+  namespace: psytest
+  labels:
+    type: back
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-back
+  template:
+    metadata:
+      labels:
+        app: java-back
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: harborpass
+      containers:
+      - name: nlpservice
+        image: 192.168.77.20/psytest/myjar:jar
+        imagePullPolicy: IfNotPresent
+        env: 
+        - name: env
+          value: "-Xms64m -Xmx128m"
+        resources:
+          requests:
+            memory: "150Mi"
+          limits:
+            memory: "500Mi"
+        ports:
+        - name: live-port
+          containerPort: 8080
+          hostPort: 8080
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 300
+          failureThreshold: 3
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 900
