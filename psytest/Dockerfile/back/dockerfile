@@ -1,0 +1,9 @@
+FROM openjdk:8
+
+#RUN apt-get update && apt-get install -y openjdk-8-jre
+WORKDIR /
+ENV env="-Xms64m -Xmx128m"
+RUN mkdir /jdk_project
+EXPOSE 8080
+COPY myjar.jar /jdk_project/myjar.jar
+ENTRYPOINT ["sh","-c","java $env -jar /jdk_project/myjar.jar"]
